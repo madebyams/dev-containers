@@ -7,7 +7,7 @@ RUN apt install python3 python3-pip pipx wget unzip dos2unix -y
 
 RUN wget https://github.com/Kitware/CMake/releases/download/v4.3.0-rc1/cmake-4.3.0-rc1-linux-x86_64.sh
 RUN yes | bash cmake-*
-RUN pipx install conan
+RUN pipx install --pipx-home /opt/pipx --pip-bin-dir /usr/local/bin conan
 
 WORKDIR /usr/bin
 COPY *.py .
