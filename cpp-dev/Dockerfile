@@ -12,6 +12,6 @@ COPY *.py .
 RUN chmod +x build.py
 RUN chmod +x run.py
 
-RUN dos2unix /usr/bin*.py
+RUN dos2unix /usr/bin/*.py
 
 CMD ["bash"]
