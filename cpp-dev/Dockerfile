@@ -9,5 +9,7 @@ RUN pipx install conan
 
 WORKDIR /usr/bin
 COPY *.py .
+RUN chmod +x build.py
+RUN chmod +x run.py
 
 CMD ["bash"]
