@@ -7,7 +7,7 @@ RUN wget https://github.com/Kitware/CMake/releases/download/v4.3.0-rc1/cmake-4.3
 RUN yes | bash cmake-*
 RUN pipx install conan
 
-WORKDIR /root
+WORKDIR /usr/bin
 COPY *.py .
 
 CMD ["bash"]
