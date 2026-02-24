@@ -8,9 +8,6 @@ RUN apt install python3 python3-pip pipx wget unzip dos2unix -y
 RUN wget https://github.com/Kitware/CMake/releases/download/v4.3.0-rc1/cmake-4.3.0-rc1-linux-x86_64.sh
 RUN yes | bash cmake-*
 
-RUN wget https://github.com/conan-io/conan/releases/download/2.25.2/conan-2.25.2-linux-x86_64.tgz
-RUN tar -xvf conan-2.25.2-linux-x86_64.tgz
-RUN cp -rf conan-*/bin/* /usr/bin
 
 WORKDIR /usr/bin
 
