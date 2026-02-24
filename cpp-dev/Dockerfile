@@ -3,7 +3,7 @@ FROM docker.io/ubuntu
 ENV PATH="/root/.local/bin:${PATH}"
 
 RUN apt upgrade -y && apt update -y
-RUN apt install python3 python3-pip pipx wget unzip dos2unix -y
+RUN apt install python3 python3-pip pipx wget unzip dos2unix ninja -y
 
 RUN pip install --break-system-packages conan
 
