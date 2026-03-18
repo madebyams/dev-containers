@@ -1,0 +1,33 @@
+stages:
+  - build
+
+.kaniko:
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
+  before_script:
+    - mkdir -p /kaniko/.docker
+    - echo "{\"auths\":{\"${CI_REGISTRY}\":{\"auth\":\"$(echo -n ${CI_REGISTRY_USER}:${CI_REGISTRY_PASSWORD} | base64)\"}}}" > /kaniko/.docker/config.json
+
+build:cpp-dev:
+  extends: .kaniko
+  stage: build
+  script:
+    - /kaniko/executor
+        --context "${CI_PROJECT_DIR}/cpp-dev"
+        --dockerfile "${CI_PROJECT_DIR}/cpp-dev/Dockerfile"
+        --destination "${CI_REGISTRY_IMAGE}/cpp-dev:${CI_COMMIT_SHORT_SHA}"
+        --destination "${CI_REGISTRY_IMAGE}/cpp-dev:latest"
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+validate:cpp-dev:
+  extends: .kaniko
+  stage: build
+  script:
+    - /kaniko/executor
+        --context "${CI_PROJECT_DIR}/cpp-dev"
+        --dockerfile "${CI_PROJECT_DIR}/cpp-dev/Dockerfile"
+        --no-push
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
