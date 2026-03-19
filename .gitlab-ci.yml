@@ -33,3 +33,49 @@ validate:cpp-dev:
         --no-push
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+
+build:aarch64-linux:
+  extends: .kaniko
+  stage: build
+  script:
+    - /kaniko/executor
+        --context "${CI_PROJECT_DIR}/aarch64-linux"
+        --dockerfile "${CI_PROJECT_DIR}/aarch64-linux/Dockerfile"
+        --destination "${CI_REGISTRY_IMAGE}/aarch64-linux:${CI_COMMIT_SHORT_SHA}"
+        --destination "${CI_REGISTRY_IMAGE}/aarch64-linux:latest"
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+validate:aarch64-linux:
+  extends: .kaniko
+  stage: build
+  script:
+    - /kaniko/executor
+        --context "${CI_PROJECT_DIR}/aarch64-linux"
+        --dockerfile "${CI_PROJECT_DIR}/aarch64-linux/Dockerfile"
+        --no-push
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+
+build:arm-none-eabi:
+  extends: .kaniko
+  stage: build
+  script:
+    - /kaniko/executor
+        --context "${CI_PROJECT_DIR}/arm-none-eabi"
+        --dockerfile "${CI_PROJECT_DIR}/arm-none-eabi/Dockerfile"
+        --destination "${CI_REGISTRY_IMAGE}/arm-none-eabi:${CI_COMMIT_SHORT_SHA}"
+        --destination "${CI_REGISTRY_IMAGE}/arm-none-eabi:latest"
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+validate:arm-none-eabi:
+  extends: .kaniko
+  stage: build
+  script:
+    - /kaniko/executor
+        --context "${CI_PROJECT_DIR}/arm-none-eabi"
+        --dockerfile "${CI_PROJECT_DIR}/arm-none-eabi/Dockerfile"
+        --no-push
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
