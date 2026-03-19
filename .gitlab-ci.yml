@@ -64,6 +64,7 @@ build:arm-none-eabi:
     - /kaniko/executor
         --context "${CI_PROJECT_DIR}/arm-none-eabi"
         --dockerfile "${CI_PROJECT_DIR}/arm-none-eabi/Dockerfile"
+        --snapshot-mode=redo
         --destination "${CI_REGISTRY_IMAGE}/arm-none-eabi:${CI_COMMIT_SHORT_SHA}"
         --destination "${CI_REGISTRY_IMAGE}/arm-none-eabi:latest"
   rules:
@@ -76,6 +77,7 @@ validate:arm-none-eabi:
     - /kaniko/executor
         --context "${CI_PROJECT_DIR}/arm-none-eabi"
         --dockerfile "${CI_PROJECT_DIR}/arm-none-eabi/Dockerfile"
+        --snapshot-mode=redo
         --no-push
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
