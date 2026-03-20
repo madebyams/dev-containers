@@ -81,3 +81,26 @@ validate:arm-none-eabi:
         --no-push
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+
+build:x86_64-w64-mingw32:
+  extends: .kaniko
+  stage: build
+  script:
+    - /kaniko/executor
+        --context "${CI_PROJECT_DIR}/x86_64_w64_mingw32"
+        --dockerfile "${CI_PROJECT_DIR}/x86_64_w64_mingw32/Dockerfile"
+        --destination "${CI_REGISTRY_IMAGE}/x86_64-w64-mingw32:${CI_COMMIT_SHORT_SHA}"
+        --destination "${CI_REGISTRY_IMAGE}/x86_64-w64-mingw32:latest"
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+validate:x86_64-w64-mingw32:
+  extends: .kaniko
+  stage: build
+  script:
+    - /kaniko/executor
+        --context "${CI_PROJECT_DIR}/x86_64_w64_mingw32"
+        --dockerfile "${CI_PROJECT_DIR}/x86_64_w64_mingw32/Dockerfile"
+        --no-push
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
