@@ -89,6 +89,7 @@ build:x86_64-w64-mingw32:
     - /kaniko/executor
         --context "${CI_PROJECT_DIR}/x86_64_w64_mingw32"
         --dockerfile "${CI_PROJECT_DIR}/x86_64_w64_mingw32/Dockerfile"
+        --snapshot-mode=redo
         --destination "${CI_REGISTRY_IMAGE}/x86_64-w64-mingw32:${CI_COMMIT_SHORT_SHA}"
         --destination "${CI_REGISTRY_IMAGE}/x86_64-w64-mingw32:latest"
   rules:
@@ -101,6 +102,7 @@ validate:x86_64-w64-mingw32:
     - /kaniko/executor
         --context "${CI_PROJECT_DIR}/x86_64_w64_mingw32"
         --dockerfile "${CI_PROJECT_DIR}/x86_64_w64_mingw32/Dockerfile"
+        --snapshot-mode=redo
         --no-push
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
