@@ -20,5 +20,4 @@ tasks:
 artifacts:
   - dev-containers/dev-containers-cpp-dev.oci.tar
   - dev-containers/dev-containers-aarch64-linux.oci.tar
-  - dev-containers/dev-containers-arm-none-eabi.oci.tar
   - dev-containers/dev-containers-x86_64_w64_mingw32.oci.tar
