@@ -1,0 +1,22 @@
+image: debian/stable
+packages:
+  - buildah
+  - fuse-overlayfs
+  - uidmap
+sources:
+  - https://git.sr.ht/~itsams_wav/dev-containers
+tasks:
+  - build-images: |
+      cd dev-containers
+      set -eu
+      for image in cpp-dev aarch64-linux arm-none-eabi x86_64_w64_mingw32; do
+        buildah --storage-driver=vfs bud --isolation=chroot --network=host \
+          --file "$image/Dockerfile" --tag "dev-containers-$image:latest" "$image"
+        buildah --storage-driver=vfs push "dev-containers-$image:latest" \
+          "oci-archive:dev-containers-$image.oci.tar"
+      done
+artifacts:
+  - dev-containers/dev-containers-cpp-dev.oci.tar
+  - dev-containers/dev-containers-aarch64-linux.oci.tar
+  - dev-containers/dev-containers-arm-none-eabi.oci.tar
+  - dev-containers/dev-containers-x86_64_w64_mingw32.oci.tar
