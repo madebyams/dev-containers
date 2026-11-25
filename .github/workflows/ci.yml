@@ -1,0 +1,62 @@
+name: CI
+
+# Converted from the former builds.sr.ht manifest (.build.yml).
+# Each sourcehut task is one step; $HOME is the workspace, as on sourcehut.
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: debian:stable
+      options: --privileged
+    env:
+      DEBIAN_FRONTEND: noninteractive
+    defaults:
+      run:
+        shell: bash -xe {0}
+    steps:
+      - name: Install packages
+        run: |
+          apt-get update
+          apt-get install -y git ca-certificates \
+            buildah \
+            fuse-overlayfs \
+            uidmap \
+            netavark \
+            aardvark-dns
+
+      - uses: actions/checkout@v4
+        with:
+          path: "dev-containers"
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: "build-images"
+        run: |
+          export HOME="$GITHUB_WORKSPACE"
+          cd "$HOME"
+          cd dev-containers
+          set -eu
+          for image in cpp-dev aarch64-linux arm-none-eabi x86_64_w64_mingw32; do
+            buildah --storage-driver=vfs bud --isolation=chroot --network=host \
+              --file "$image/Dockerfile" --tag "dev-containers-$image:latest" "$image"
+            buildah --storage-driver=vfs push "dev-containers-$image:latest" \
+              "oci-archive:dev-containers-$image.oci.tar"
+          done
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: artifacts
+          if-no-files-found: warn
+          path: |
+            dev-containers/dev-containers-cpp-dev.oci.tar
+            dev-containers/dev-containers-aarch64-linux.oci.tar
+            dev-containers/dev-containers-x86_64_w64_mingw32.oci.tar
